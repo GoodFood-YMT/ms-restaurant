@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-restaurant-db-config
+  labels:
+    app: ms-restaurant-db
+data:
+  POSTGRES_DB: ms-restaurant
+  POSTGRES_USER: api
+  POSTGRES_PASSWORD: postgres123

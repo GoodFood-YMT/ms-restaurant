@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-restaurant
+  labels:
+    app: ms-restaurant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-restaurant
+  template:
+    metadata:
+      labels:
+        app: ms-restaurant
+    spec:
+      containers:
+        - envFrom:
+            - configMapRef:
+                name: ms-restaurant-config
+            - secretRef:
+                name: ms-restaurant-secret
+          image: yasinkara/ms-restaurant:latest
+          imagePullPolicy: Always
+          name: ms-restaurant
+          command: ['/bin/sh']
+          args: ['-c', 'node ace migration:run --force;node ace db:seed;dumb-init node server.js']
+          ports:
+            - containerPort: 3333
+          resources: {}
+      initContainers:
+        - name: check-db-ready
+          image: postgres:9.6.5
+          command:
+            [
+              'sh',
+              '-c',
+              'until pg_isready -h ms-restaurant-db -p 5432; do echo waiting for database; sleep 2; done;',
+            ]
+      restartPolicy: Always

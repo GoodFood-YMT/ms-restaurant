@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-restaurant-cache-config
+  labels:
+    app: ms-restaurant-cache
+data: {}

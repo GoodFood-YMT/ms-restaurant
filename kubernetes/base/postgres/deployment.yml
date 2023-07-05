@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-restaurant-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-restaurant-db
+  template:
+    metadata:
+      labels:
+        app: ms-restaurant-db
+    spec:
+      containers:
+        - name: ms-restaurant-db
+          image: postgres
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: ms-restaurant-db-config
+          volumeMounts:
+            - mountPath: /var/lib/postgres/data
+              name: db-data
+          resources: {}
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: ms-restaurant-db-volume-claim

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-restaurant-cache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-restaurant-cache
+  template:
+    metadata:
+      labels:
+        app: ms-restaurant-cache
+    spec:
+      containers:
+        - name: ms-restaurant-cache
+          image: redis
+          ports:
+            - containerPort: 6379
+          envFrom:
+            - configMapRef:
+                name: ms-restaurant-cache-config
+          resources: {}
