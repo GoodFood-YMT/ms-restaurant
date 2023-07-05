@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-restaurant
+  labels:
+    app: ms-restaurant
+spec:
+  type: ClusterIP
+  ports:
+    - name: 'web'
+      port: 80
+      targetPort: 3333
+  selector:
+    app: ms-restaurant

@@ -16,5 +16,5 @@ data:
   PG_PASSWORD: 'postgres123'
   PG_DB_NAME: 'ms-restaurant'
   REDIS_CONNECTION: 'local'
-  REDIS_HOST: 'ms-auth-cache'
+  REDIS_HOST: 'ms-restaurant-cache'
   REDIS_PORT: '6379'
