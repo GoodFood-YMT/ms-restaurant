@@ -9,7 +9,22 @@ export default class RestaurantsController {
   public async index({ request, response }: HttpContextContract) {
     const page = request.input('page', 1)
     const limit = 2
-    const cache = await Redis.get(`restaurant:all:${page}`)
+    const cache = await Redis.get(`restaurant:all-enabled:${page}`)
+    if (cache) {
+      return JSON.parse(cache)
+    }
+    const result = await Database.from('restaurants')
+      .where('enabled', true)
+      .orderBy('created_at')
+      .paginate(page, limit)
+    await Redis.set(`restaurant:all-enabled:${page}`, JSON.stringify(result))
+    response.json(result)
+  }
+
+  public async getAllRestaurants({ request, response }: HttpContextContract) {
+    const page = request.input('page', 1)
+    const limit = 2
+    const cache = await Redis.get(`restaurant:all${page}`)
     if (cache) {
       return JSON.parse(cache)
     }
@@ -34,7 +49,7 @@ export default class RestaurantsController {
     if (cache) {
       return JSON.parse(cache)
     }
-    const allRestaurant = await Redis.get('restaurant:all')
+    const allRestaurant = await Redis.get('restaurant:all-enabled')
     if (allRestaurant) {
       return JSON.parse(allRestaurant).findOrFail((r: Restaurant) => r.id === id)
     }
