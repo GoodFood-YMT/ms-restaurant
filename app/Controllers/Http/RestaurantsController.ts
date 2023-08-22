@@ -43,8 +43,8 @@ export default class RestaurantsController {
     response.created(restaurant)
   }
 
-  public async show({ request, response }: HttpContextContract) {
-    const id = Number(request.params().id)
+  public async show({ response, params }: HttpContextContract) {
+    const id = params.id
     const cache = await Redis.get(`restaurant:${id}`)
     if (cache) {
       return JSON.parse(cache)
