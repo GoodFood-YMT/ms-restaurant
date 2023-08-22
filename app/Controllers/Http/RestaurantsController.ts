@@ -53,7 +53,7 @@ export default class RestaurantsController {
     // if (allRestaurant) {
     //   return JSON.parse(allRestaurant).findOrFail((r: Restaurant) => r.id === id)
     // }
-    const restaurant = await Restaurant.findOrFail(id)
+    const restaurant = await Restaurant.findByOrFail('id', id)
     await Redis.set(`restaurant:${id}`, JSON.stringify(restaurant))
     response.json(restaurant)
   }
