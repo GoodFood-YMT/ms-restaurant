@@ -63,11 +63,11 @@ export default class RestaurantsController {
     const payload = await request.validate(UpdateRestaurantValidator)
     const restaurant = await Restaurant.findOrFail(id)
     if (restaurant !== null) {
-      restaurant.name = payload.name
-      restaurant.address = payload.address
-      restaurant.enabled = payload.enabled
-      restaurant.city = payload.city
-      restaurant.country = payload.country
+      if (payload.name) restaurant.name = payload.name
+      if (payload.address) restaurant.address = payload.address
+      if (payload.enabled) restaurant.enabled = payload.enabled
+      if (payload.city) restaurant.city = payload.city
+      if (payload.country) restaurant.country = payload.country
       await restaurant.save()
 
       const keys = await Redis.keys('restaurant:*')
