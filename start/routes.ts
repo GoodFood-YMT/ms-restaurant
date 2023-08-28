@@ -20,9 +20,11 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/restaurants/', 'RestaurantsController.index')
+Route.get('/restaurants', 'RestaurantsController.index')
 
-Route.post('/restaurants/', 'RestaurantsController.store')
+Route.get('restaurants/all', 'RestaurantsController.getAllRestaurants')
+
+Route.post('/restaurants', 'RestaurantsController.store')
 
 Route.get('/restaurants/:id', 'RestaurantsController.show')
 

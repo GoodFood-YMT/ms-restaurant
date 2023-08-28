@@ -9,7 +9,7 @@ export default class RestaurantsController {
   public async index({ request, response }: HttpContextContract) {
     const page = request.input('page', 1)
     const limit = request.input('limit', 10)
-    const cache = await Redis.get(`restaurant:all:${page}`)
+    const cache = await Redis.get(`restaurant:all-enabled:${page}`)
     if (cache) {
       return JSON.parse(cache)
     }
@@ -34,11 +34,11 @@ export default class RestaurantsController {
     if (cache) {
       return JSON.parse(cache)
     }
-    const allRestaurant = await Redis.get('restaurant:all')
-    if (allRestaurant) {
-      return JSON.parse(allRestaurant).findOrFail((r: Restaurant) => r.id === id)
-    }
-    const restaurant = await Restaurant.findOrFail(id)
+    // const allRestaurant = await Redis.get('restaurant:all-enabled')
+    // if (allRestaurant) {
+    //   return JSON.parse(allRestaurant).findOrFail((r: Restaurant) => r.id === id)
+    // }
+    const restaurant = await Restaurant.findByOrFail('id', id)
     await Redis.set(`restaurant:${id}`, JSON.stringify(restaurant))
     response.json(restaurant)
   }
@@ -48,11 +48,11 @@ export default class RestaurantsController {
     const payload = await request.validate(UpdateRestaurantValidator)
     const restaurant = await Restaurant.findOrFail(id)
     if (restaurant !== null) {
-      restaurant.name = payload.name
-      restaurant.address = payload.address
-      restaurant.enabled = payload.enabled
-      restaurant.city = payload.city
-      restaurant.country = payload.country
+      if (payload.name) restaurant.name = payload.name
+      if (payload.address) restaurant.address = payload.address
+      if (payload.enabled) restaurant.enabled = payload.enabled
+      if (payload.city) restaurant.city = payload.city
+      if (payload.country) restaurant.country = payload.country
       await restaurant.save()
 
       const keys = await Redis.keys('restaurant:*')
