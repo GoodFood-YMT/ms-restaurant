@@ -8,7 +8,7 @@ import UpdateRestaurantValidator from 'App/Validators/UpdateRestaurantValidator'
 export default class RestaurantsController {
   public async index({ request, response }: HttpContextContract) {
     const page = request.input('page', 1)
-    const limit = 2
+    const limit = request.input('limit', 10)
     const cache = await Redis.get(`restaurant:all:${page}`)
     if (cache) {
       return JSON.parse(cache)
@@ -29,7 +29,7 @@ export default class RestaurantsController {
   }
 
   public async show({ request, response }: HttpContextContract) {
-    const id = Number(request.params().id)
+    const id = request.params().id
     const cache = await Redis.get(`restaurant:${id}`)
     if (cache) {
       return JSON.parse(cache)
