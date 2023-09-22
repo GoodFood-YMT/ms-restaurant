@@ -7,13 +7,6 @@ metadata:
     nginx.ingress.kubernetes.io/auth-response-headers: UserID, Role, RestaurantID
     nginx.ingress.kubernetes.io/auth-snippet: |
       proxy_set_header FromUrl $request_uri; proxy_set_header Method $request_method;
-    nginx.ingress.kubernetes.io/enable-cors: 'true'
-    nginx.ingress.kubernetes.io/cors-allow-origin: '*'
-    nginx.ingress.kubernetes.io/cors-allow-methods: 'PUT, PATCH, GET, POST, OPTIONS, DELETE'
-    nginx.ingress.kubernetes.io/cors-allow-headers: 'Authorization, Content-Type, Origin, X-Requested-With, Accept'
-    nginx.ingress.kubernetes.io/cors-expose-headers: 'cache-control, content-language, content-type, expires, last-modified, pragma'
-    nginx.ingress.kubernetes.io/cors-allow-credentials: 'false'
-    nginx.ingress.kubernetes.io/cors-max-age: '90'
 spec:
   ingressClassName: nginx
   rules:
@@ -26,4 +19,4 @@ spec:
                 name: ms-restaurant
                 port:
                   number: 80
-            path: /restaurants/
+            path: /restaurants
