@@ -44,7 +44,7 @@ const corsConfig: CorsConfig = {
   |                     one of the above values.
   |
   */
-  origin: ['goodfood.localdev:3000', 'goodfood.localdev', 'localhost:3000', 'localhost'],
+  origin: '*',
 
   /*
   |--------------------------------------------------------------------------
