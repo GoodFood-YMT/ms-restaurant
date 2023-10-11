@@ -60,9 +60,13 @@ export default class RestaurantsController {
         await Redis.del(...keys)
       }
 
-      response.json(`restaurant ${restaurant.name} is updated`)
+      response.json({
+        message: `restaurant ${restaurant.name} is updated`,
+      })
     } else {
-      response.json(`cannot find restaurant with id ${id}`)
+      response.json({
+        message: `cannot find restaurant with id ${id}`,
+      })
     }
   }
 
@@ -75,6 +79,8 @@ export default class RestaurantsController {
       await Redis.del(...keys)
     }
 
-    response.json(`restaurant with id ${id} deleted`)
+    response.json({
+      message: `restaurant with id ${id} is deleted`,
+    })
   }
 }
