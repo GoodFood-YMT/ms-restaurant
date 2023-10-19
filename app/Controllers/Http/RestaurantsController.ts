@@ -9,12 +9,16 @@ export default class RestaurantsController {
   public async index({ request, response }: HttpContextContract) {
     const page = request.input('page', 1)
     const limit = request.input('limit', 10)
-    const cache = await Redis.get(`restaurant:all-enabled:${page}`)
-    if (cache) {
-      return JSON.parse(cache)
+    const q = request.input('q', '')
+
+    let query = Database.from('restaurants')
+
+    if (q) {
+      query = query.where('name', 'ilike', `%${q}%`).orWhere('city', 'ilike', `%${q}%`)
     }
-    const result = await Database.from('restaurants').orderBy('created_at').paginate(page, limit)
-    await Redis.set(`restaurant:all:${page}`, JSON.stringify(result))
+
+    const result = await query.orderBy('created_at').paginate(page, limit)
+
     response.json(result)
   }
 
