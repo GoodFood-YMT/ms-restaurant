@@ -29,6 +29,8 @@ export default class Restaurant extends BaseModel {
 
   @beforeCreate()
   public static async setId(restaurant: Restaurant) {
-    restaurant.id = cuid()
+    if (!restaurant.id) {
+      restaurant.id = cuid()
+    }
   }
 }
