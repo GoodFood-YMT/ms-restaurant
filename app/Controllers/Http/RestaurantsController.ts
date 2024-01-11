@@ -2,6 +2,7 @@ import Redis from '@ioc:Adonis/Addons/Redis'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Database from '@ioc:Adonis/Lucid/Database'
 import Restaurant from 'App/Models/Restaurant'
+import { getAddressCoords } from 'App/Utils/functions'
 import CreateRestaurantValidator from 'App/Validators/RestaurantValidator'
 import UpdateRestaurantValidator from 'App/Validators/UpdateRestaurantValidator'
 
@@ -24,7 +25,10 @@ export default class RestaurantsController {
 
   public async store({ request, response }: HttpContextContract) {
     const payload = await request.validate(CreateRestaurantValidator)
-    const restaurant = await Restaurant.create(payload)
+    const coords = await getAddressCoords(
+      `${payload.address}, ${payload.zipCode}, ${payload.city}, ${payload.country}`
+    )
+    const restaurant = await Restaurant.create({ ...payload, lat: coords.lat, lon: coords.lon })
     const keys = await Redis.keys('restaurant:*')
     if (keys.length > 0) {
       await Redis.del(...keys)
@@ -38,10 +42,6 @@ export default class RestaurantsController {
     if (cache) {
       return JSON.parse(cache)
     }
-    // const allRestaurant = await Redis.get('restaurant:all-enabled')
-    // if (allRestaurant) {
-    //   return JSON.parse(allRestaurant).findOrFail((r: Restaurant) => r.id === id)
-    // }
     const restaurant = await Restaurant.findByOrFail('id', id)
     await Redis.set(`restaurant:${id}`, JSON.stringify(restaurant))
     response.json(restaurant)
@@ -53,10 +53,24 @@ export default class RestaurantsController {
     const restaurant = await Restaurant.findOrFail(id)
     if (restaurant !== null) {
       if (payload.name) restaurant.name = payload.name
-      if (payload.address) restaurant.address = payload.address
       if (payload.enabled) restaurant.enabled = payload.enabled
-      if (payload.city) restaurant.city = payload.city
-      if (payload.country) restaurant.country = payload.country
+      if (
+        payload.city !== restaurant.city ||
+        payload.address !== restaurant.address ||
+        payload.zipCode !== restaurant.zipCode ||
+        payload.country !== restaurant.country
+      ) {
+        if (payload.address) restaurant.address = payload.address
+        if (payload.city) restaurant.city = payload.city
+        if (payload.zipCode) restaurant.zipCode = payload.zipCode
+        if (payload.country) restaurant.country = payload.country
+
+        const coords = await getAddressCoords(
+          `${restaurant.address}, ${restaurant.zipCode}, ${restaurant.city}, ${restaurant.country}`
+        )
+        restaurant.lat = coords.lat
+        restaurant.lon = coords.lon
+      }
       await restaurant.save()
 
       const keys = await Redis.keys('restaurant:*')

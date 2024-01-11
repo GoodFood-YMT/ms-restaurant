@@ -16,10 +16,19 @@ export default class Restaurant extends BaseModel {
   public address: string
 
   @column()
+  public zipCode: string
+
+  @column()
   public city: string
 
   @column()
   public country: string
+
+  @column()
+  public lat: Number
+
+  @column()
+  public lon: Number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

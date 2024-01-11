@@ -9,6 +9,7 @@ export default class UpdateRestaurantValidator {
     enabled: schema.boolean.optional(),
     address: schema.string.optional(),
     city: schema.string.optional(),
+    zipCode: schema.string.optional(),
     country: schema.string.optional(),
   })
 

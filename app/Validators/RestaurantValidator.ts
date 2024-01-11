@@ -32,6 +32,7 @@ export default class CreateRestaurantValidator {
     address: schema.string(),
     city: schema.string(),
     country: schema.string(),
+    zipCode: schema.string(),
   })
 
   /**
