@@ -26,7 +26,7 @@ export default class RestaurantsController {
   public async store({ request, response }: HttpContextContract) {
     const payload = await request.validate(CreateRestaurantValidator)
     const coords = await getAddressCoords(
-      `${payload.address}, ${payload.zipCode}, ${payload.city}, ${payload.country}`
+      `${payload.name}, ${payload.address}, ${payload.zipCode}, ${payload.city}, ${payload.country}`
     )
     const restaurant = await Restaurant.create({ ...payload, lat: coords.lat, lon: coords.lon })
     const keys = await Redis.keys('restaurant:*')
@@ -66,7 +66,7 @@ export default class RestaurantsController {
         if (payload.country) restaurant.country = payload.country
 
         const coords = await getAddressCoords(
-          `${restaurant.address}, ${restaurant.zipCode}, ${restaurant.city}, ${restaurant.country}`
+          `${payload.name}, ${payload.address}, ${payload.zipCode}, ${payload.city}, ${payload.country}`
         )
         restaurant.lat = coords.lat
         restaurant.lon = coords.lon
