@@ -11,6 +11,8 @@ export default class extends BaseSeeder {
         city: 'Honfleur',
         zipCode: '14600',
         country: 'France',
+        lat: 49.4199028,
+        lon: 0.2320076,
         enabled: true,
       },
       {
@@ -20,6 +22,8 @@ export default class extends BaseSeeder {
         city: 'Beuzeville',
         zipCode: '27210',
         country: 'France',
+        lat: 49.3481743,
+        lon: 0.3405806,
         enabled: true,
       },
       {
@@ -29,6 +33,8 @@ export default class extends BaseSeeder {
         city: 'Pont-audemer',
         zipCode: '27467',
         country: 'France',
+        lat: 49.3572571,
+        lon: 0.5161323,
         enabled: true,
       },
       {
@@ -38,6 +44,8 @@ export default class extends BaseSeeder {
         city: 'Pont-audemer',
         country: 'France',
         zipCode: '27467',
+        lat: 49.3572571,
+        lon: 0.5161323,
         enabled: true,
       },
       {
@@ -47,6 +55,8 @@ export default class extends BaseSeeder {
         city: 'Pont-audemer',
         zipCode: '27467',
         country: 'France',
+        lat: 49.3572571,
+        lon: 0.5161323,
         enabled: true,
       },
       {
@@ -56,6 +66,8 @@ export default class extends BaseSeeder {
         city: 'Pont-audemer',
         zipCode: '27467',
         country: 'France',
+        lat: 49.3572571,
+        lon: 0.5161323,
         enabled: true,
       },
       {
@@ -65,6 +77,8 @@ export default class extends BaseSeeder {
         city: 'Paris',
         zipCode: '75000',
         country: 'France',
+        lat: 48.8656031,
+        lon: 2.3205259,
         enabled: true,
       },
     ])
